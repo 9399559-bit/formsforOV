@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open Village 2026 | iZBURG</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="card">
+        <p class="eyebrow">Open Village 2026</p>
+        <h1>Заявка на консультацию iZBURG</h1>
+        <p class="intro">
+          Оставьте контакт, и команда iZBURG свяжется с вами после выставки.
+        </p>
+
+        <div id="successMessage" class="message success hidden">
+          <strong id="successTitle">Спасибо, заявка отправлена.</strong>
+          <span>Мы свяжемся с вами в ближайшее время.</span>
+          <span>
+            После строительства дома вы получите цифровой паспорт дома и сервисную
+            книжку домовладельца — современный инструмент управления и обслуживания
+            вашего дома.
+          </span>
+        </div>
+        <div id="errorMessage" class="message error hidden"></div>
+
+        <form id="leadForm" novalidate>
+          <label>
+            Имя *
+            <input id="name" name="name" type="text" maxlength="255" required />
+          </label>
+
+          <p class="field-group-label">Контакт для связи: телефон или email *</p>
+
+          <div class="grid">
+            <label>
+              Телефон
+              <input id="phone" name="phone" type="tel" maxlength="50" />
+            </label>
+            <label>
+              Email
+              <input id="email" name="email" type="email" />
+            </label>
+          </div>
+
+          <div class="grid">
+            <label>
+              Наличие участка
+              <input id="has_land" name="has_land" type="text" />
+            </label>
+            <label>
+              Локация
+              <input id="location" name="location" type="text" />
+            </label>
+          </div>
+
+          <div class="grid">
+            <label>
+              Линейка
+              <input id="product_line" name="product_line" type="text" />
+            </label>
+            <label>
+              Проект
+              <input id="project" name="project" type="text" />
+            </label>
+          </div>
+
+          <div class="grid">
+            <label>
+              Дата начала строительства
+              <input
+                id="start_date"
+                name="start_date"
+                type="text"
+              />
+            </label>
+            <label>
+              Источник финансирования
+              <input id="financing_source" name="financing_source" type="text" />
+            </label>
+          </div>
+
+          <div class="grid">
+            <label>
+              Бюджет
+              <input id="budget" name="budget" type="text" />
+            </label>
+            <label>
+              Удобный способ связи
+              <input
+                id="preferred_communication"
+                name="preferred_communication"
+                type="text"
+              />
+            </label>
+          </div>
+
+          <label>
+            Комментарий
+            <textarea id="comment" name="comment" rows="4"></textarea>
+          </label>
+
+          <label class="consent">
+            <input id="pdn_consent" name="pdn_consent" type="checkbox" />
+            <span>
+              __PDN_CONSENT_LABEL__ *
+              и принимаю
+              <a href="__PDN_POLICY_URL__" target="_blank" rel="noreferrer">
+                политику ПДн
+              </a>.
+            </span>
+          </label>
+
+          <p class="hint">
+            * Обязательно: имя, хотя бы один контакт и согласие ПДн.
+          </p>
+
+          <button id="submitButton" type="submit">Отправить</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
