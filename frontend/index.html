@@ -8,118 +8,151 @@
   </head>
   <body>
     <main class="page">
-      <section class="card">
-        <p class="eyebrow">Open Village 2026</p>
-        <h1>Заявка на консультацию iZBURG</h1>
-        <p class="intro">
-          Оставьте контакт, и команда iZBURG свяжется с вами после выставки.
-        </p>
+      <div class="page-inner">
+        <header class="site-header" aria-label="iZBURG Open Village 2026">
+          <a class="brand" href="/" aria-label="iZBURG">
+            <img
+              class="brand-logo"
+              src="/static/assets/logo-izburg-web.png"
+              width="155"
+              height="50"
+              alt="IZBURG"
+            />
+          </a>
+          <p class="event-label">Open Village 2026</p>
+        </header>
 
-        <div id="successMessage" class="message success hidden">
-          <strong id="successTitle">Спасибо, заявка отправлена.</strong>
-          <span>Мы свяжемся с вами в ближайшее время.</span>
+        <section class="hero" aria-labelledby="page-title">
+          <p class="brand-badge">iZBURG · загородные дома</p>
+          <h1 id="page-title">Проконсультируем по формату дома для вашей семьи</h1>
+          <p class="intro">
+            Оставьте контакты — мы свяжемся с вами после выставки, ответим на
+            вопросы и поможем подобрать формат дома под ваш участок, бюджет и сроки.
+          </p>
+        </section>
+
+        <div id="successMessage" class="message success hidden" role="status">
+          <strong id="successTitle">Спасибо! Заявка принята.</strong>
+          <span>Мы свяжемся с вами после выставки.</span>
           <span>
-            После строительства дома вы получите цифровой паспорт дома и сервисную
-            книжку домовладельца — современный инструмент управления и обслуживания
-            вашего дома.
+            Каждый Домовладелец Izburg получает цифровой паспорт дома и сервисную
+            книжку — современный инструмент управления и обслуживания вашего дома.
           </span>
         </div>
-        <div id="errorMessage" class="message error hidden"></div>
+        <div id="errorMessage" class="message error hidden" role="alert"></div>
 
-        <form id="leadForm" novalidate>
-          <label>
-            Имя *
-            <input id="name" name="name" type="text" maxlength="255" required />
-          </label>
+        <form id="leadForm" class="lead-form" novalidate>
+          <section class="form-section" aria-labelledby="contacts-title">
+            <div class="section-heading">
+              <span class="section-number">01</span>
+              <h2 id="contacts-title">Контакты</h2>
+            </div>
 
-          <p class="field-group-label">Контакт для связи: телефон или email *</p>
+            <label class="field">
+              <span>Имя <strong>*</strong></span>
+              <input id="name" name="name" type="text" maxlength="255" autocomplete="name" required />
+            </label>
 
-          <div class="grid">
-            <label>
-              Телефон
-              <input id="phone" name="phone" type="tel" maxlength="50" />
-            </label>
-            <label>
-              Email
-              <input id="email" name="email" type="email" />
-            </label>
-          </div>
+            <p class="field-group-label">Укажите телефон или email <strong>*</strong></p>
 
-          <div class="grid">
-            <label>
-              Наличие участка
-              <input id="has_land" name="has_land" type="text" />
-            </label>
-            <label>
-              Локация
-              <input id="location" name="location" type="text" />
-            </label>
-          </div>
+            <div class="grid">
+              <label class="field">
+                <span>Телефон</span>
+                <input id="phone" name="phone" type="tel" maxlength="50" autocomplete="tel" />
+              </label>
+              <label class="field">
+                <span>Email</span>
+                <input id="email" name="email" type="email" autocomplete="email" />
+              </label>
+            </div>
+          </section>
 
-          <div class="grid">
-            <label>
-              Линейка
-              <input id="product_line" name="product_line" type="text" />
-            </label>
-            <label>
-              Проект
-              <input id="project" name="project" type="text" />
-            </label>
-          </div>
+          <section class="form-section" aria-labelledby="home-title">
+            <div class="section-heading">
+              <span class="section-number">02</span>
+              <h2 id="home-title">О будущем доме</h2>
+            </div>
 
-          <div class="grid">
-            <label>
-              Дата начала строительства
-              <input
-                id="start_date"
-                name="start_date"
-                type="text"
-              />
-            </label>
-            <label>
-              Источник финансирования
-              <input id="financing_source" name="financing_source" type="text" />
-            </label>
-          </div>
+            <div class="grid">
+              <label class="field">
+                <span>Локация</span>
+                <input id="location" name="location" type="text" autocomplete="address-level1" />
+              </label>
+              <label class="field">
+                <span>Наличие участка</span>
+                <input id="has_land" name="has_land" type="text" />
+              </label>
+            </div>
 
-          <div class="grid">
-            <label>
-              Бюджет
-              <input id="budget" name="budget" type="text" />
-            </label>
-            <label>
-              Удобный способ связи
-              <input
-                id="preferred_communication"
-                name="preferred_communication"
-                type="text"
-              />
-            </label>
-          </div>
+            <div class="grid">
+              <label class="field">
+                <span>Формат / линейка дома</span>
+                <input id="product_line" name="product_line" type="text" />
+              </label>
+              <label class="field">
+                <span>Проект</span>
+                <input id="project" name="project" type="text" />
+              </label>
+            </div>
 
-          <label>
-            Комментарий
-            <textarea id="comment" name="comment" rows="4"></textarea>
-          </label>
+            <div class="grid">
+              <label class="field">
+                <span>Срок начала строительства</span>
+                <input id="start_date" name="start_date" type="text" />
+              </label>
+              <label class="field">
+                <span>Бюджет</span>
+                <input id="budget" name="budget" type="text" />
+              </label>
+            </div>
+          </section>
+
+          <section class="form-section" aria-labelledby="communication-title">
+            <div class="section-heading">
+              <span class="section-number">03</span>
+              <h2 id="communication-title">Когда и как удобно связаться</h2>
+            </div>
+
+            <div class="grid">
+              <label class="field">
+                <span>Источник финансирования</span>
+                <input id="financing_source" name="financing_source" type="text" />
+              </label>
+              <label class="field">
+                <span>Удобный способ связи</span>
+                <input id="preferred_communication" name="preferred_communication" type="text" />
+              </label>
+            </div>
+
+            <label class="field">
+              <span>Комментарий</span>
+              <textarea id="comment" name="comment" rows="4"></textarea>
+            </label>
+          </section>
+
+          <section class="passport-note" aria-label="Цифровой паспорт дома">
+            <span class="rings" aria-hidden="true"></span>
+            <p>
+              Каждый Домовладелец Izburg получает цифровой паспорт дома и сервисную
+              книжку — современный инструмент управления и обслуживания вашего дома.
+            </p>
+          </section>
 
           <label class="consent">
             <input id="pdn_consent" name="pdn_consent" type="checkbox" />
             <span>
-              __PDN_CONSENT_LABEL__ *
-              и принимаю
+              __PDN_CONSENT_LABEL__ <strong>*</strong> и принимаю
               <a href="__PDN_POLICY_URL__" target="_blank" rel="noreferrer">
                 политику ПДн
               </a>.
             </span>
           </label>
 
-          <p class="hint">
-            * Обязательно: имя, хотя бы один контакт и согласие ПДн.
-          </p>
+          <p class="hint">* Обязательные поля: имя, телефон или email, согласие ПДн.</p>
 
-          <button id="submitButton" type="submit">Отправить</button>
+          <button id="submitButton" class="submit-button" type="submit">Отправить заявку</button>
         </form>
-      </section>
+      </div>
     </main>
 
     <script src="/static/app.js" defer></script>

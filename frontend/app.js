@@ -17,7 +17,7 @@ function showSuccess(message) {
 function clearMessages() {
   errorMessage.textContent = "";
   errorMessage.classList.add("hidden");
-  successTitle.textContent = "Спасибо, заявка отправлена.";
+  successTitle.textContent = "Спасибо! Заявка принята.";
   successMessage.classList.add("hidden");
 }
 
@@ -88,7 +88,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     form.reset();
-    showSuccess("Спасибо, заявка отправлена.");
+    showSuccess("Спасибо! Заявка принята.");
   } catch (error) {
     showError(error.message || "Не удалось отправить заявку. Попробуйте ещё раз.");
   } finally {
