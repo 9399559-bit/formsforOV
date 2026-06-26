@@ -8,6 +8,14 @@
 
 @font-face {
   font-family: "PF Square Sans Pro";
+  src: url("/static/assets/fonts/PFSquareSansPro-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PF Square Sans Pro";
   src: url("/static/assets/fonts/PFSquareSansPro-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
@@ -16,9 +24,33 @@
 
 @font-face {
   font-family: "PF Square Sans Pro";
+  src: url("/static/assets/fonts/PFSquareSansPro-MedItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PF Square Sans Pro";
   src: url("/static/assets/fonts/PFSquareSansPro-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PF Square Sans Pro";
+  src: url("/static/assets/fonts/PFSquareSansPro-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PF Square Sans Pro";
+  src: url("/static/assets/fonts/PFSquareSansPro-XBlackItal.ttf") format("truetype");
+  font-weight: 900;
+  font-style: italic;
   font-display: swap;
 }
 
@@ -32,6 +64,7 @@
   --paper: #f8f6f2;
   --line: rgba(41, 76, 89, 0.16);
   --line-strong: rgba(135, 115, 99, 0.34);
+  --required-red: #b3261e;
   --error-bg: #fff2ee;
   --error-text: #8f2f20;
   --success-bg: #edf6f9;
@@ -56,6 +89,7 @@ body {
   color: var(--gray-deep);
   font-family: "PF Square Sans Pro", Arial, sans-serif;
   font-weight: 300;
+  font-synthesis: none;
 }
 
 body::before {
@@ -203,8 +237,23 @@ h2 {
   gap: 8px;
 }
 
+.choice-field {
+  align-content: start;
+  border: 0;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  column-gap: 22px;
+  row-gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.choice-field legend {
+  grid-column: 1 / -1;
+}
+
 .field span,
-.field-group-label {
+.field-group-label,
+.choice-field legend {
   color: var(--gray-deep);
   font-size: 15px;
   font-weight: 500;
@@ -213,7 +262,7 @@ h2 {
 .field strong,
 .field-group-label strong,
 .consent strong {
-  color: var(--blue-deep);
+  color: var(--required-red);
 }
 
 .field-group-label {
@@ -226,7 +275,7 @@ button {
   font: inherit;
 }
 
-input,
+input:not([type="radio"]):not([type="checkbox"]),
 textarea {
   width: 100%;
   border: 1px solid var(--line);
@@ -240,12 +289,40 @@ textarea {
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-input:focus,
+input:not([type="radio"]):not([type="checkbox"])::placeholder,
+textarea::placeholder {
+  color: rgba(50, 54, 59, 0.42);
+  opacity: 1;
+}
+
+input:not([type="radio"]):not([type="checkbox"]):focus,
 textarea:focus {
   outline: none;
   border-color: var(--blue-deep);
   background: #fbfdfe;
   box-shadow: 0 0 0 3px rgba(208, 228, 238, 0.85);
+}
+
+.choice-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--gray-deep);
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.choice-option input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--blue-deep);
+}
+
+.choice-option span {
+  font-size: 16px;
+  font-weight: 300;
 }
 
 textarea {
@@ -371,16 +448,25 @@ textarea {
   display: none;
 }
 
-@media (max-width: 430px) {
+@media (max-width: 600px) {
   .page {
     padding: 14px;
+  }
+
+  .page-inner {
+    margin: 0;
+    max-width: 362px;
   }
 
   .site-header {
     align-items: flex-start;
     flex-direction: column;
     gap: 8px;
-    padding-bottom: 20px;
+    padding-bottom: 14px;
+  }
+
+  .hero {
+    padding: 4px 0 20px;
   }
 
   .brand-logo {
@@ -388,11 +474,12 @@ textarea {
   }
 
   h1 {
-    font-size: 31px;
+    font-size: 29px;
   }
 
   .intro {
     font-size: 17px;
+    margin-top: 14px;
   }
 
   .lead-form {

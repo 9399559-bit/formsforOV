@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Open Village 2026 | iZBURG</title>
+    <title>Open Village 2026/2027 | iZBURG</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
     <main class="page">
       <div class="page-inner">
-        <header class="site-header" aria-label="iZBURG Open Village 2026">
+        <header class="site-header" aria-label="iZBURG Open Village 2026/2027">
           <a class="brand" href="/" aria-label="iZBURG">
             <img
               class="brand-logo"
@@ -19,15 +19,14 @@
               alt="IZBURG"
             />
           </a>
-          <p class="event-label">Open Village 2026</p>
+          <p class="event-label">Open Village 2026/2027</p>
         </header>
 
         <section class="hero" aria-labelledby="page-title">
-          <p class="brand-badge">iZBURG · загородные дома</p>
-          <h1 id="page-title">Проконсультируем по формату дома для вашей семьи</h1>
+          <h1 id="page-title">Поможем подобрать дом для вашей семьи</h1>
           <p class="intro">
-            Оставьте контакты — мы свяжемся с вами после выставки, ответим на
-            вопросы и поможем подобрать формат дома под ваш участок, бюджет и сроки.
+            Заполните форму — мы свяжемся с вами, ответим на вопросы и поможем
+            подобрать дом под ваш участок и семью.
           </p>
         </section>
 
@@ -35,8 +34,8 @@
           <strong id="successTitle">Спасибо! Заявка принята.</strong>
           <span>Мы свяжемся с вами после выставки.</span>
           <span>
-            Каждый Домовладелец Izburg получает цифровой паспорт дома и сервисную
-            книжку — современный инструмент управления и обслуживания вашего дома.
+            После строительства вы получите цифровой паспорт дома и сервисную
+            книжку — чтобы обслуживание дома было понятным и удобным.
           </span>
         </div>
         <div id="errorMessage" class="message error hidden" role="alert"></div>
@@ -50,7 +49,15 @@
 
             <label class="field">
               <span>Имя <strong>*</strong></span>
-              <input id="name" name="name" type="text" maxlength="255" autocomplete="name" required />
+              <input
+                id="name"
+                name="name"
+                type="text"
+                maxlength="255"
+                autocomplete="name"
+                placeholder="Например, Анна"
+                required
+              />
             </label>
 
             <p class="field-group-label">Укажите телефон или email <strong>*</strong></p>
@@ -58,11 +65,24 @@
             <div class="grid">
               <label class="field">
                 <span>Телефон</span>
-                <input id="phone" name="phone" type="tel" maxlength="50" autocomplete="tel" />
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  maxlength="50"
+                  autocomplete="tel"
+                  placeholder="+7 999 000 00 00"
+                />
               </label>
               <label class="field">
                 <span>Email</span>
-                <input id="email" name="email" type="email" autocomplete="email" />
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="name@example.com"
+                />
               </label>
             </div>
           </section>
@@ -76,33 +96,49 @@
             <div class="grid">
               <label class="field">
                 <span>Локация</span>
-                <input id="location" name="location" type="text" autocomplete="address-level1" />
+                <input
+                  id="location"
+                  name="location"
+                  type="text"
+                  autocomplete="address-level1"
+                  placeholder="Например, Ленинградская область"
+                />
               </label>
-              <label class="field">
-                <span>Наличие участка</span>
-                <input id="has_land" name="has_land" type="text" />
-              </label>
+              <fieldset class="field choice-field">
+                <legend>Наличие участка</legend>
+                <label class="choice-option">
+                  <input type="radio" name="has_land" value="Есть" />
+                  <span>Есть</span>
+                </label>
+                <label class="choice-option">
+                  <input type="radio" name="has_land" value="Нет" />
+                  <span>Нет</span>
+                </label>
+              </fieldset>
             </div>
 
             <div class="grid">
               <label class="field">
                 <span>Формат / линейка дома</span>
-                <input id="product_line" name="product_line" type="text" />
+                <input id="product_line" name="product_line" type="text" placeholder="Например, Izburg" />
               </label>
-              <label class="field">
-                <span>Проект</span>
-                <input id="project" name="project" type="text" />
-              </label>
+              <fieldset class="field choice-field">
+                <legend>Проект</legend>
+                <label class="choice-option">
+                  <input type="radio" name="project" value="Типовой" />
+                  <span>Типовой</span>
+                </label>
+                <label class="choice-option">
+                  <input type="radio" name="project" value="Индивидуальный" />
+                  <span>Индивидуальный</span>
+                </label>
+              </fieldset>
             </div>
 
             <div class="grid">
               <label class="field">
                 <span>Срок начала строительства</span>
-                <input id="start_date" name="start_date" type="text" />
-              </label>
-              <label class="field">
-                <span>Бюджет</span>
-                <input id="budget" name="budget" type="text" />
+                <input id="start_date" name="start_date" type="text" placeholder="Например, осень 2026" />
               </label>
             </div>
           </section>
@@ -116,25 +152,40 @@
             <div class="grid">
               <label class="field">
                 <span>Источник финансирования</span>
-                <input id="financing_source" name="financing_source" type="text" />
+                <input
+                  id="financing_source"
+                  name="financing_source"
+                  type="text"
+                  placeholder="Собственные средства / ипотека"
+                />
               </label>
               <label class="field">
                 <span>Удобный способ связи</span>
-                <input id="preferred_communication" name="preferred_communication" type="text" />
+                <input
+                  id="preferred_communication"
+                  name="preferred_communication"
+                  type="text"
+                  placeholder="Телефон, WhatsApp или email"
+                />
               </label>
             </div>
 
             <label class="field">
               <span>Комментарий</span>
-              <textarea id="comment" name="comment" rows="4"></textarea>
+              <textarea
+                id="comment"
+                name="comment"
+                rows="4"
+                placeholder="Что важно учесть при консультации?"
+              ></textarea>
             </label>
           </section>
 
           <section class="passport-note" aria-label="Цифровой паспорт дома">
             <span class="rings" aria-hidden="true"></span>
             <p>
-              Каждый Домовладелец Izburg получает цифровой паспорт дома и сервисную
-              книжку — современный инструмент управления и обслуживания вашего дома.
+              После строительства вы получите цифровой паспорт дома и сервисную
+              книжку — чтобы обслуживание дома было понятным и удобным.
             </p>
           </section>
 
@@ -150,7 +201,7 @@
 
           <p class="hint">* Обязательные поля: имя, телефон или email, согласие ПДн.</p>
 
-          <button id="submitButton" class="submit-button" type="submit">Отправить заявку</button>
+          <button id="submitButton" class="submit-button" type="submit">Получить консультацию</button>
         </form>
       </div>
     </main>

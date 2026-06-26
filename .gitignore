@@ -4,3 +4,10 @@ __pycache__/
 *.py[cod]
 .DS_Store
 backend/managers.json
+
+# brand source files (хранить вне репо)
+*.cdr
+*.eps
+docs/source/brand/
+frontend/assets/Logo_Izburg.pdf
+frontend/assets/Снимок экрана*.png

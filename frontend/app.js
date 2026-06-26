@@ -37,18 +37,21 @@ function valueOf(id) {
   return document.getElementById(id).value.trim();
 }
 
+function checkedValue(name) {
+  return new FormData(form).get(name)?.trim() || "";
+}
+
 function collectPayload() {
   return {
     name: valueOf("name"),
     phone: valueOf("phone"),
     email: valueOf("email"),
-    has_land: valueOf("has_land"),
+    has_land: checkedValue("has_land"),
     location: valueOf("location"),
     product_line: valueOf("product_line"),
-    project: valueOf("project"),
+    project: checkedValue("project"),
     start_date: valueOf("start_date"),
     financing_source: valueOf("financing_source"),
-    budget: valueOf("budget"),
     preferred_communication: valueOf("preferred_communication"),
     comment: valueOf("comment"),
     pdn_consent: document.getElementById("pdn_consent").checked,
