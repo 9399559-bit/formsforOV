@@ -1,9 +1,13 @@
+import logging
 from datetime import datetime, timezone
 from typing import Any
 
 from .bitrix import get_bitrix_client
 from .config import Settings
 from .schemas import LeadCreateRequest
+
+
+logger = logging.getLogger(__name__)
 
 
 def build_bitrix_comments(
@@ -71,8 +75,19 @@ def build_bitrix_payload(data: LeadCreateRequest, settings: Settings) -> dict[st
         "UF_CRM_1690559734": str(data.email) if data.email else "",
     }
 
-    if settings.bitrix_default_assigned_by_id is not None:
-        fields["ASSIGNED_BY_ID"] = settings.bitrix_default_assigned_by_id
+    # Резолвим ответственного по неугадываемой метке m. Фолбэк гарантирует,
+    # что лид не останется бесхозным, поэтому ASSIGNED_BY_ID ставим всегда.
+    resolved = settings.managers_mapping.get(data.m) if data.m else None
+    assigned_by_id = resolved if resolved is not None else settings.fallback_responsible_id
+    fields["ASSIGNED_BY_ID"] = assigned_by_id
+
+    # Метку логировать можно (это не ПДн). Имя/телефон/email — не логируем.
+    logger.info(
+        "Lead manager resolve: m=%s matched=%s assigned_by_id=%s",
+        data.m,
+        resolved is not None,
+        assigned_by_id,
+    )
 
     if data.phone:
         fields["PHONE"] = [{"VALUE": data.phone, "VALUE_TYPE": "WORK"}]

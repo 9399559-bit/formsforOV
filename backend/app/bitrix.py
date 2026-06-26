@@ -36,9 +36,9 @@ class RealBitrixClient:
     def create_lead(self, payload: dict[str, Any]) -> dict[str, Any]:
         if not self.settings.bitrix_webhook_url:
             raise BitrixIntegrationError("Bitrix webhook URL is missing.")
-        if self.settings.bitrix_default_assigned_by_id is None:
-            raise BitrixIntegrationError("Bitrix default assignee is missing.")
 
+        # ASSIGNED_BY_ID всегда приходит в payload (метка m или fallback из
+        # managers.json), поэтому отдельный default-ответственный может быть None.
         endpoint = resolve_crm_lead_add_url(self.settings.bitrix_webhook_url)
         body = json.dumps({"fields": payload["fields"]}, ensure_ascii=False).encode("utf-8")
         req = request.Request(

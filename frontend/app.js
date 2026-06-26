@@ -1,3 +1,15 @@
+// Неугадываемая метка менеджера из URL формы (?m=...). Читаем один раз при
+// загрузке. На фронт передаётся ТОЛЬКО метка — голый ID менеджера не приходит
+// и нигде не отображается; резолв в ответственного делает бэкенд.
+function readManagerLabel() {
+  const raw = new URLSearchParams(window.location.search).get("m");
+  if (!raw) return "";
+  const trimmed = raw.trim();
+  return /^[A-Za-z0-9_-]{1,64}$/.test(trimmed) ? trimmed : "";
+}
+
+const managerLabel = readManagerLabel();
+
 const form = document.getElementById("leadForm");
 const errorMessage = document.getElementById("errorMessage");
 const successMessage = document.getElementById("successMessage");
@@ -40,6 +52,7 @@ function collectPayload() {
     preferred_communication: valueOf("preferred_communication"),
     comment: valueOf("comment"),
     pdn_consent: document.getElementById("pdn_consent").checked,
+    m: managerLabel,
   };
 }
 

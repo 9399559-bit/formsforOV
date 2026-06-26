@@ -18,6 +18,9 @@ class LeadCreateRequest(BaseModel):
     preferred_communication: Optional[str] = None
     comment: Optional[str] = None
     pdn_consent: bool
+    # Неугадываемая метка менеджера из URL формы (?m=...). Голый ID на фронт
+    # не передаётся — резолв в ASSIGNED_BY_ID происходит на бэкенде.
+    m: Optional[str] = Field(default=None, max_length=64)
 
     @field_validator(
         "name",
@@ -41,6 +44,20 @@ class LeadCreateRequest(BaseModel):
             stripped = value.strip()
             return stripped or None
         return value
+
+    @field_validator("m", mode="before")
+    @classmethod
+    def normalize_manager_label(cls, value: object) -> object:
+        if not isinstance(value, str):
+            return None
+        stripped = value.strip()
+        # Допускаем только [A-Za-z0-9_-] и длину до 64; иначе — трактуем как None,
+        # чтобы кривая метка не отбраковывала всю заявку (лид уйдёт на fallback).
+        if not stripped or len(stripped) > 64:
+            return None
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", stripped):
+            return None
+        return stripped
 
     @field_validator("email", mode="before")
     @classmethod
