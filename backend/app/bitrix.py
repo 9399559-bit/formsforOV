@@ -13,6 +13,19 @@ class BitrixIntegrationError(RuntimeError):
     """Raised when the real Bitrix24 integration cannot process the lead."""
 
 
+def _safe_log_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    """Return only non-PII fields safe to log.
+
+    Никогда не возвращает NAME / PHONE / EMAIL / COMMENTS / UF_CRM_* со
+    значениями — только маршрутные метаданные заявки.
+    """
+    return {
+        "channel": payload.get("channel"),
+        "source": payload.get("source"),
+        "assigned_by_id": payload.get("fields", {}).get("ASSIGNED_BY_ID"),
+    }
+
+
 def resolve_crm_lead_add_url(webhook_url: str) -> str:
     normalized = webhook_url.rstrip("/")
     if normalized.endswith("crm.lead.add") or normalized.endswith("crm.lead.add.json"):
@@ -22,10 +35,7 @@ def resolve_crm_lead_add_url(webhook_url: str) -> str:
 
 class MockBitrixClient:
     def create_lead(self, payload: dict[str, Any]) -> dict[str, Any]:
-        logger.info(
-            "Lead submission mock payload: %s",
-            json.dumps(payload, ensure_ascii=False),
-        )
+        logger.info("Lead submission (mock): %s", _safe_log_summary(payload))
         return {"mode": "mock", "lead_id": None, "payload": payload}
 
 
@@ -65,12 +75,22 @@ class RealBitrixClient:
             raise BitrixIntegrationError("Bitrix24 returned an invalid response.") from exc
 
         if parsed.get("error"):
-            logger.error("Bitrix API returned an application error: %s", parsed)
+            # Не дампим parsed целиком: ответ может содержать эхо присланных
+            # полей (ПДн). Логируем только код/описание ошибки.
+            logger.error(
+                "Bitrix API returned an application error: error=%s error_description=%s",
+                parsed.get("error"),
+                parsed.get("error_description"),
+            )
             raise BitrixIntegrationError("Bitrix24 rejected the lead.")
 
         lead_id = parsed.get("result")
         if not isinstance(lead_id, int):
-            logger.error("Bitrix API returned unexpected success payload: %s", parsed)
+            # Тоже без дампа объекта — только ключи верхнего уровня.
+            logger.error(
+                "Bitrix API returned unexpected success payload; top-level keys: %s",
+                list(parsed.keys()) if isinstance(parsed, dict) else type(parsed).__name__,
+            )
             raise BitrixIntegrationError("Bitrix24 returned an unexpected response.")
 
         logger.info("Bitrix lead created successfully with id=%s", lead_id)
