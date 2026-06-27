@@ -421,6 +421,37 @@ textarea {
   transform: none;
 }
 
+/* Состояние отправки: остаётся в фирменном синем (не «бледно-выключенное»),
+   с лёгкой крутилкой — читается как «в процессе», а не как недоступная кнопка. */
+.submit-button--loading,
+.submit-button--loading:disabled {
+  background: var(--blue-deep);
+  color: var(--white);
+  cursor: progress;
+  opacity: 0.85;
+  box-shadow: none;
+  transform: none;
+}
+
+.submit-button--loading::after {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 10px;
+  vertical-align: -3px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: submit-spin 0.7s linear infinite;
+}
+
+@keyframes submit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .message {
   display: grid;
   gap: 8px;

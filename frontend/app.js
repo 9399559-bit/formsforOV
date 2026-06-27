@@ -18,6 +18,7 @@ const submitButton = document.getElementById("submitButton");
 const pdnConsent = document.getElementById("pdn_consent");
 
 let toastTimer = null;
+let isSubmitting = false;
 
 // Кнопка активна только при отмеченном согласии ПДн. Реально выключаем submit
 // (disabled), а не только подкрашиваем — чтобы заявка без согласия не уходила.
@@ -77,6 +78,13 @@ function collectPayload() {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+
+  // Защита от двойного клика: пока запрос в полёте, новый submit игнорируем
+  // (кнопка уже disabled, флаг — страховка от повторного запроса).
+  if (isSubmitting) {
+    return;
+  }
+
   clearMessages();
 
   const payload = collectPayload();
@@ -96,7 +104,12 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
+  // Состояние загрузки: мгновенно по клику, до ответа сервера.
+  const originalLabel = submitButton.textContent;
+  isSubmitting = true;
   submitButton.disabled = true;
+  submitButton.classList.add("submit-button--loading");
+  submitButton.textContent = "Отправляем...";
 
   try {
     const response = await fetch("/api/leads", {
@@ -124,6 +137,10 @@ form.addEventListener("submit", async (event) => {
   } catch (error) {
     showError(error.message || "Не удалось отправить заявку. Попробуйте ещё раз.");
   } finally {
+    // Снимаем состояние загрузки и возвращаем исходный текст кнопки.
+    isSubmitting = false;
+    submitButton.classList.remove("submit-button--loading");
+    submitButton.textContent = originalLabel;
     // После reset чекбокс снова снят → кнопка станет disabled/бледной;
     // при ошибке согласие остаётся отмеченным → кнопка снова активна.
     updateSubmitState();
