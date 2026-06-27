@@ -10,8 +10,7 @@ class LeadCreateRequest(BaseModel):
     email: Optional[EmailStr] = None
     has_land: Optional[str] = None
     location: Optional[str] = None
-    product_line: Optional[str] = None
-    project: Optional[str] = None
+    brand: Optional[str] = None
     start_date: Optional[str] = None
     financing_source: Optional[str] = None
     budget: Optional[str] = None
@@ -27,8 +26,7 @@ class LeadCreateRequest(BaseModel):
         "phone",
         "has_land",
         "location",
-        "product_line",
-        "project",
+        "brand",
         "start_date",
         "financing_source",
         "budget",

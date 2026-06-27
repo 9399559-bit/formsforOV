@@ -30,9 +30,6 @@
           </p>
         </section>
 
-        <div id="successMessage" class="message success toast hidden" role="status" aria-live="polite">
-          <strong id="successTitle">Спасибо, отправлено</strong>
-        </div>
         <div id="errorMessage" class="message error hidden" role="alert"></div>
 
         <form id="leadForm" class="lead-form" novalidate>
@@ -113,21 +110,26 @@
             </div>
 
             <div class="grid">
-              <label class="field">
-                <span>Формат / линейка дома</span>
-                <input id="product_line" name="product_line" type="text" placeholder="Например, Izburg" />
-              </label>
               <fieldset class="field choice-field">
-                <legend>Проект</legend>
+                <legend>Бренд</legend>
                 <label class="choice-option">
-                  <input type="radio" name="project" value="Типовой" />
-                  <span>Типовой</span>
+                  <input type="radio" name="brand" value="Ливвил" />
+                  <span>Ливвил</span>
                 </label>
                 <label class="choice-option">
-                  <input type="radio" name="project" value="Индивидуальный" />
-                  <span>Индивидуальный</span>
+                  <input type="radio" name="brand" value="Избург" />
+                  <span>Избург</span>
                 </label>
               </fieldset>
+              <label class="field">
+                <span>Источник финансирования</span>
+                <input
+                  id="financing_source"
+                  name="financing_source"
+                  type="text"
+                  placeholder="Собственные средства / ипотека"
+                />
+              </label>
             </div>
 
             <div class="grid">
@@ -141,29 +143,24 @@
           <section class="form-section" aria-labelledby="communication-title">
             <div class="section-heading">
               <span class="section-number">03</span>
-              <h2 id="communication-title">Когда и как удобно связаться</h2>
+              <h2 id="communication-title">Комментарии</h2>
             </div>
 
-            <div class="grid">
-              <label class="field">
-                <span>Источник финансирования</span>
-                <input
-                  id="financing_source"
-                  name="financing_source"
-                  type="text"
-                  placeholder="Собственные средства / ипотека"
-                />
+            <fieldset class="field choice-field choice-field--row">
+              <legend>Удобный способ связи</legend>
+              <label class="choice-option">
+                <input type="radio" name="preferred_communication" value="Телефон" />
+                <span>Телефон</span>
               </label>
-              <label class="field">
-                <span>Удобный способ связи</span>
-                <input
-                  id="preferred_communication"
-                  name="preferred_communication"
-                  type="text"
-                  placeholder="Телефон, WhatsApp или email"
-                />
+              <label class="choice-option">
+                <input type="radio" name="preferred_communication" value="E-mail" />
+                <span>E-mail</span>
               </label>
-            </div>
+              <label class="choice-option">
+                <input type="radio" name="preferred_communication" value="Не важно" />
+                <span>Не важно</span>
+              </label>
+            </fieldset>
 
             <label class="field">
               <span>Комментарий</span>
@@ -171,7 +168,7 @@
                 id="comment"
                 name="comment"
                 rows="4"
-                placeholder="Что важно учесть при консультации?"
+                placeholder="Напишите, что важно в консультации? Это поможет нам подготовиться к ней"
               ></textarea>
             </label>
           </section>
@@ -179,8 +176,9 @@
           <section class="passport-note" aria-label="Цифровой паспорт дома">
             <span class="rings" aria-hidden="true"></span>
             <p>
-              После строительства вы получите цифровой паспорт дома и сервисную
-              книжку — чтобы обслуживание дома было понятным и удобным.
+              После строительства дома вы получите цифровой паспорт дома и
+              сервисную книжку, чтобы обслуживание дома было предсказуемым и
+              удобным.
             </p>
           </section>
 
@@ -196,7 +194,12 @@
 
           <p class="hint">* Обязательные поля: имя, телефон или email, согласие ПДн.</p>
 
-          <button id="submitButton" class="submit-button submit-button--disabled" type="submit" disabled>Получить консультацию</button>
+          <div class="submit-wrap">
+            <button id="submitButton" class="submit-button submit-button--disabled" type="submit" disabled>Получить консультацию</button>
+            <div id="successMessage" class="message success toast hidden" role="status" aria-live="polite">
+              <strong id="successTitle">Спасибо, отправлено</strong>
+            </div>
+          </div>
         </form>
       </div>
     </main>

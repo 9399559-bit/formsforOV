@@ -10,6 +10,14 @@ from .schemas import LeadCreateRequest
 logger = logging.getLogger(__name__)
 
 
+# Бренд — enumeration-поле в Битриксе (UF_CRM_65DCE3ABAECD3): на форме выбирается
+# подпись, в CRM уходит ID варианта перечисления, а не текст.
+BRAND_ENUM_IDS = {
+    "Ливвил": 460,
+    "Избург": 462,
+}
+
+
 def build_bitrix_comments(
     data: LeadCreateRequest,
     channel: str,
@@ -29,10 +37,9 @@ def build_bitrix_comments(
         ("Локация", data.location or "не указано"),
         ("Предпочтительный способ связи", data.preferred_communication or "не указано"),
         ("Наличие участка", data.has_land or "не указано"),
-        ("Линейка продукта", data.product_line or "не указано"),
+        ("Бренд", data.brand or "не указано"),
         ("Дата начала строительства", data.start_date or "не указано"),
         ("Источник финансирования", data.financing_source or "не указано"),
-        ("Проект", data.project or "не указано"),
         ("Бюджет", data.budget or "не указано"),
         ("Комментарий", data.comment or "не указано"),
         ("Channel", channel),
@@ -66,10 +73,8 @@ def build_bitrix_payload(data: LeadCreateRequest, settings: Settings) -> dict[st
         "UF_CRM_1690179802": data.location or "",
         "UF_CRM_1690179814": data.preferred_communication or "",
         "UF_CRM_1690179826": data.has_land or "",
-        "UF_CRM_1690179854": data.product_line or "",
         "UF_CRM_1690179882": data.start_date or "",
         "UF_CRM_1690179895": data.financing_source or "",
-        "UF_CRM_1690179908": data.project or "",
         "UF_CRM_1690179923": data.budget or "",
         "UF_CRM_1690559724": data.phone or "",
         "UF_CRM_1690559734": str(data.email) if data.email else "",
@@ -88,6 +93,12 @@ def build_bitrix_payload(data: LeadCreateRequest, settings: Settings) -> dict[st
         resolved is not None,
         assigned_by_id,
     )
+
+    # Бренд кладём только если выбран и распознан — пустой/нулевой ID в
+    # enumeration-поле не отправляем.
+    brand_enum_id = BRAND_ENUM_IDS.get(data.brand) if data.brand else None
+    if brand_enum_id is not None:
+        fields["UF_CRM_65DCE3ABAECD3"] = brand_enum_id
 
     if data.phone:
         fields["PHONE"] = [{"VALUE": data.phone, "VALUE_TYPE": "WORK"}]
