@@ -30,13 +30,8 @@
           </p>
         </section>
 
-        <div id="successMessage" class="message success hidden" role="status">
-          <strong id="successTitle">Спасибо! Заявка принята.</strong>
-          <span>Мы свяжемся с вами после выставки.</span>
-          <span>
-            После строительства вы получите цифровой паспорт дома и сервисную
-            книжку — чтобы обслуживание дома было понятным и удобным.
-          </span>
+        <div id="successMessage" class="message success toast hidden" role="status" aria-live="polite">
+          <strong id="successTitle">Спасибо, отправлено</strong>
         </div>
         <div id="errorMessage" class="message error hidden" role="alert"></div>
 
@@ -201,7 +196,7 @@
 
           <p class="hint">* Обязательные поля: имя, телефон или email, согласие ПДн.</p>
 
-          <button id="submitButton" class="submit-button" type="submit">Получить консультацию</button>
+          <button id="submitButton" class="submit-button submit-button--disabled" type="submit" disabled>Получить консультацию</button>
         </form>
       </div>
     </main>

@@ -15,21 +15,37 @@ const errorMessage = document.getElementById("errorMessage");
 const successMessage = document.getElementById("successMessage");
 const successTitle = document.getElementById("successTitle");
 const submitButton = document.getElementById("submitButton");
+const pdnConsent = document.getElementById("pdn_consent");
+
+let toastTimer = null;
+
+// Кнопка активна только при отмеченном согласии ПДн. Реально выключаем submit
+// (disabled), а не только подкрашиваем — чтобы заявка без согласия не уходила.
+function updateSubmitState() {
+  const consented = pdnConsent.checked;
+  submitButton.disabled = !consented;
+  submitButton.classList.toggle("submit-button--disabled", !consented);
+}
 
 function showError(message) {
   errorMessage.textContent = message;
   errorMessage.classList.remove("hidden");
 }
 
-function showSuccess(message) {
+function showToast(message) {
   successTitle.textContent = message;
   successMessage.classList.remove("hidden");
+  if (toastTimer) {
+    clearTimeout(toastTimer);
+  }
+  toastTimer = setTimeout(() => {
+    successMessage.classList.add("hidden");
+  }, 3500);
 }
 
 function clearMessages() {
   errorMessage.textContent = "";
   errorMessage.classList.add("hidden");
-  successTitle.textContent = "Спасибо! Заявка принята.";
   successMessage.classList.add("hidden");
 }
 
@@ -104,10 +120,15 @@ form.addEventListener("submit", async (event) => {
     }
 
     form.reset();
-    showSuccess("Спасибо! Заявка принята.");
+    showToast("Спасибо, отправлено");
   } catch (error) {
     showError(error.message || "Не удалось отправить заявку. Попробуйте ещё раз.");
   } finally {
-    submitButton.disabled = false;
+    // После reset чекбокс снова снят → кнопка станет disabled/бледной;
+    // при ошибке согласие остаётся отмеченным → кнопка снова активна.
+    updateSubmitState();
   }
 });
+
+pdnConsent.addEventListener("change", updateSubmitState);
+updateSubmitState();

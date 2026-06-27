@@ -412,9 +412,13 @@ textarea {
   transform: translateY(-1px);
 }
 
-.submit-button:disabled {
+.submit-button:disabled,
+.submit-button--disabled {
+  background: var(--brown-soft);
   cursor: not-allowed;
-  opacity: 0.62;
+  opacity: 0.5;
+  box-shadow: none;
+  transform: none;
 }
 
 .message {
@@ -431,6 +435,21 @@ textarea {
   border: 1px solid rgba(208, 228, 238, 0.95);
   background: var(--success-bg);
   color: var(--success-text);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: max-content;
+  max-width: calc(100% - 36px);
+  justify-items: center;
+  border: 1px solid #e9c48e;
+  background: #fbe3c2;
+  color: #b26a00;
+  box-shadow: var(--shadow);
 }
 
 .success strong {
