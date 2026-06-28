@@ -10,10 +10,48 @@ function readManagerLabel() {
 
 const managerLabel = readManagerLabel();
 
+// Слой 2 защиты от спама: cooldown на устройстве. Вспомогательный лимит поверх
+// серверного IP-rate-limit — localStorage чистится/инкогнито обходит, поэтому он
+// НЕ заменяет серверный слой, а работает параллельно.
+const DEVICE_LIMIT_24H = 5;
+const DEVICE_STORAGE_KEY = "ov2026_lead_submissions";
+const DEVICE_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+// Читает timestamps отправок с этого устройства за последние 24 часа.
+// При недоступном/битом localStorage возвращает [] — слой 2 просто молчит.
+function readRecentDeviceSubmissions() {
+  try {
+    const raw = localStorage.getItem(DEVICE_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    const cutoff = Date.now() - DEVICE_WINDOW_MS;
+    return parsed.filter((ts) => typeof ts === "number" && ts > cutoff);
+  } catch (error) {
+    return [];
+  }
+}
+
+function deviceLimitReached() {
+  return readRecentDeviceSubmissions().length >= DEVICE_LIMIT_24H;
+}
+
+// Фиксирует успешную отправку с устройства (вызывать только после ответа 200).
+function recordDeviceSubmission() {
+  try {
+    const recent = readRecentDeviceSubmissions();
+    recent.push(Date.now());
+    localStorage.setItem(DEVICE_STORAGE_KEY, JSON.stringify(recent));
+  } catch (error) {
+    // localStorage недоступен — серверный IP-лимит остаётся защитой.
+  }
+}
+
 const form = document.getElementById("leadForm");
 const errorMessage = document.getElementById("errorMessage");
 const successMessage = document.getElementById("successMessage");
 const successTitle = document.getElementById("successTitle");
+const blockMessage = document.getElementById("blockMessage");
 const submitButton = document.getElementById("submitButton");
 const pdnConsent = document.getElementById("pdn_consent");
 
@@ -33,7 +71,20 @@ function showError(message) {
   errorMessage.classList.remove("hidden");
 }
 
+// Сообщение-ограничение у кнопки (device-лимит или серверный 429): запрос НЕ
+// ушёл. Показываем рядом с submit и прячем toast «Спасибо» и верхнюю ошибку —
+// блокировка не должна висеть одновременно с ними.
+function showBlockMessage(message) {
+  errorMessage.textContent = "";
+  errorMessage.classList.add("hidden");
+  successMessage.classList.add("hidden");
+  blockMessage.textContent = message;
+  blockMessage.classList.remove("hidden");
+}
+
 function showToast(message) {
+  // «Спасибо» = запрос ушёл; снимаем блокировку, если была показана ранее.
+  blockMessage.classList.add("hidden");
   successTitle.textContent = message;
   successMessage.classList.remove("hidden");
   if (toastTimer) {
@@ -48,6 +99,8 @@ function clearMessages() {
   errorMessage.textContent = "";
   errorMessage.classList.add("hidden");
   successMessage.classList.add("hidden");
+  blockMessage.textContent = "";
+  blockMessage.classList.add("hidden");
 }
 
 function valueOf(id) {
@@ -103,6 +156,13 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
+  // Слой 2: если с устройства за сутки уже ушло DEVICE_LIMIT_24H заявок —
+  // запрос вообще не отправляем, показываем понятное сообщение.
+  if (deviceLimitReached()) {
+    showBlockMessage("Вы уже отправили несколько заявок. Если нужно ещё — обратитесь к менеджеру.");
+    return;
+  }
+
   // Состояние загрузки: мгновенно по клику, до ответа сервера.
   const originalLabel = submitButton.textContent;
   isSubmitting = true;
@@ -127,11 +187,20 @@ form.addEventListener("submit", async (event) => {
       result = null;
     }
 
+    // Серверный лимит (429): заявка отклонена. Показываем сообщение у кнопки,
+    // а не общую ошибку вверху и не toast «Спасибо».
+    if (response.status === 429) {
+      showBlockMessage(result?.message || "Слишком много заявок. Попробуйте позже.");
+      return;
+    }
+
     if (!response.ok || !result?.success) {
       throw new Error(result?.message || "Не удалось отправить заявку. Попробуйте ещё раз.");
     }
 
     form.reset();
+    // Только реальный успех (200) увеличивает счётчик устройства.
+    recordDeviceSubmission();
     showToast("Спасибо, отправлено");
   } catch (error) {
     showError(error.message || "Не удалось отправить заявку. Попробуйте ещё раз.");
@@ -148,3 +217,12 @@ form.addEventListener("submit", async (event) => {
 
 pdnConsent.addEventListener("change", updateSubmitState);
 updateSubmitState();
+
+// Блокировка-крышка по таймеру не скрывается (в отличие от toast «Спасибо»):
+// висит, пока человек снова не начнёт заполнять форму. Тогда убираем её, чтобы
+// открыть кнопку для повторной отправки.
+form.addEventListener("input", () => {
+  if (!blockMessage.classList.contains("hidden")) {
+    blockMessage.classList.add("hidden");
+  }
+});

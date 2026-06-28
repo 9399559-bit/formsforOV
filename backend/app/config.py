@@ -83,6 +83,10 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     database_url: str = ""
 
+    # Слой 1 защиты от спама: пороги IP-rate-limit (принятых заявок на IP).
+    rate_limit_10min: int = 5
+    rate_limit_1h: int = 20
+
     # Заполняются из managers.json в get_settings(), а не из окружения.
     managers_mapping: dict[str, int] = {}
     fallback_responsible_id: int = 0

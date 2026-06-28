@@ -513,6 +513,30 @@ textarea {
   color: var(--error-text);
 }
 
+/* Сообщение-ограничение — КРЫШКА поверх кнопки submit (device-лимит или 429):
+   запрос НЕ ушёл. Непрозрачный тревожный красный фон полностью перекрывает
+   кнопку — она не видна и недоступна для клика. По таймеру НЕ скрывается.
+   top/left/right + min-height:100% (без bottom): крышка не ниже кнопки, а при
+   длинном тексте подрастает вниз, по-прежнему перекрывая кнопку целиком. */
+.block-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  min-height: 100%;
+  margin: 0;
+  border: 1px solid #e3a3a8;
+  border-radius: 8px;
+  background: #f8d7da;
+  color: #8f2f20;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
 .hidden {
   display: none;
 }
